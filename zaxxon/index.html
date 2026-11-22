@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OPERATION ZAXXON: DESERT HOG — A-10 3D Isometric Shooter</title>
+  <link rel="stylesheet" href="./style.css?v=5" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+        "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Damage / Low Altitude Screen Vignette -->
+    <div id="damage-overlay"></div>
+
+    <!-- TOP TACTICAL HUD BAR -->
+    <header id="hud-top">
+      <div class="hud-panel score-panel">
+        <div class="hud-stat">
+          <span class="hud-label">1UP SCORE</span>
+          <span id="score-val" class="hud-value">000000</span>
+        </div>
+        <div class="hud-stat">
+          <span class="hud-label">HIGH SCORE</span>
+          <span id="hiscore-val" class="hud-value accent-gold">025000</span>
+        </div>
+        <div class="hud-stat">
+          <span class="hud-label">SORTIES (LIVES)</span>
+          <div id="lives-container" class="lives-icons"></div>
+        </div>
+      </div>
+
+      <div class="hud-panel sector-panel">
+        <div class="sector-title-row">
+          <span class="hud-tag">MISSION</span>
+          <span id="sector-name" class="sector-title">LEVEL 01 // PHASE 1: SEA APPROACH TO COAST</span>
+        </div>
+        <div class="fuel-row">
+          <span class="hud-label">JP-8 FUEL</span>
+          <div class="fuel-bar-outer">
+            <div id="fuel-bar-fill" class="fuel-bar-fill"></div>
+            <div class="fuel-ticks"></div>
+          </div>
+          <span id="fuel-pct" class="fuel-pct">100%</span>
+        </div>
+      </div>
+
+      <div class="hud-panel weapon-panel">
+        <div class="weapon-header">
+          <div>
+            <span class="hud-label">PRIMARY WEAPON</span>
+            <div class="weapon-name">GAU-8/A 30MM AVENGER</div>
+          </div>
+          <div class="weapon-badges">
+            <div id="brrrt-indicator" class="brrrt-badge">READY</div>
+            <div id="fps-badge" class="fps-badge" title="Frames Per Second &amp; Frame Render Time">
+              <span id="fps-val">60 FPS</span>
+            </div>
+          </div>
+        </div>
+        <div class="heat-row">
+          <span class="hud-label">BARREL TEMP</span>
+          <div class="heat-bar-outer">
+            <div id="heat-bar-fill" class="heat-bar-fill"></div>
+          </div>
+          <span id="rpm-val" class="rpm-readout">3900 RPM</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- LEFT CLASSIC ZAXXON ALTIMETER (H - L) -->
+    <aside id="hud-left">
+      <div class="altimeter-frame">
+        <div class="alt-letter alt-h">H</div>
+        <div class="altimeter-track">
+          <!-- Danger zone markers for wall height -->
+          <div id="alt-wall-zone" class="alt-wall-zone" title="Fortress Wall Height">
+            <span>WALL</span>
+          </div>
+          <!-- Current aircraft altitude pip -->
+          <div id="alt-pip" class="alt-pip">
+            <span id="alt-feet">120 FT</span>
+          </div>
+          <div class="alt-graduations">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="alt-letter alt-l">L</div>
+        <div id="clearance-badge" class="clearance-badge safe">CLEAR</div>
+      </div>
+    </aside>
+
+    <!-- RIGHT TACTICAL TELEMETRY & CONTROLS -->
+    <aside id="hud-right">
+      <div class="telemetry-card">
+        <div class="tel-title">TACTICAL FEED</div>
+        <div class="tel-row">
+          <span>LEVEL PROGRESS</span>
+          <strong id="enemy-count">0%</strong>
+        </div>
+        <div class="tel-row">
+          <span>WALL BREACHES</span>
+          <strong id="breach-count">0</strong>
+        </div>
+        <div class="tel-row">
+          <span>ACTIVE DEBRIS</span>
+          <strong id="debris-count">0</strong>
+        </div>
+        <div class="tel-row">
+          <span>ACTIVE SPARKS</span>
+          <strong id="spark-count">0</strong>
+        </div>
+        <div class="tel-row">
+          <span>PHYSICS DETAIL</span>
+          <strong id="hud-phys-detail">7 / 10</strong>
+        </div>
+        <div class="tel-slider-wrap">
+          <input
+            id="hud-phys-slider"
+            type="range"
+            min="0"
+            max="10"
+            step="1"
+            value="7"
+            title="Adjust Destructible Physics Detail (0-10) Live"
+          />
+        </div>
+        <div class="tel-row">
+          <span>CAMERA MODE</span>
+          <strong id="cam-mode-label">ISOMETRIC (ZAXXON)</strong>
+        </div>
+        <div class="hud-buttons">
+          <button id="btn-cam" class="hud-btn" type="button" title="Toggle Isometric / Chase Camera (Key: C)">
+            [C] CAM VIEW
+          </button>
+          <button id="btn-audio" class="hud-btn" type="button" title="Toggle Sound Effects (Key: M)">
+            [M] AUDIO: ON
+          </button>
+          <button id="btn-pause" class="hud-btn" type="button" title="Open Settings / Pause Menu (Key: ESC or P)">
+            [ESC] MENU / SETTINGS
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER BOSS HEALTH BAR (Hidden until Boss) -->
+    <div id="boss-hud" class="boss-hud hidden">
+      <div class="boss-title">WARNING // ZAXXON MK-IV DESERT MOBILE CITADEL DETECTED</div>
+      <div class="boss-bar-outer">
+        <div id="boss-bar-fill" class="boss-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- FLOATING CALLOUT BANNER -->
+    <div id="callout-banner" class="callout-banner hidden"></div>
+
+    <!-- BOTTOM CONTROLS BAR -->
+    <footer id="hud-bottom">
+      <div class="control-pill"><kbd>W</kbd><kbd>S</kbd> or <kbd>↑</kbd><kbd>↓</kbd> Altitude (Climb / Dive)</div>
+      <div class="control-pill"><kbd>A</kbd><kbd>D</kbd> or <kbd>←</kbd><kbd>→</kbd> Strafe Lateral</div>
+      <div class="control-pill"><kbd>SPACE</kbd> or <kbd>LMB</kbd> Fire 30mm GAU-8 Chaingun (Destroys &amp; Fractures Walls!)</div>
+      <div class="control-pill"><kbd>SHIFT</kbd> / <kbd>E</kbd> Barrel Roll Dodge</div>
+      <div class="control-pill"><kbd>C</kbd> Camera Angle</div>
+      <div class="control-pill"><kbd>ESC</kbd> / <kbd>P</kbd> Pause / Settings</div>
+    </footer>
+
+    <!-- START / BRIEFING / PAUSE MODAL OVERLAY -->
+    <div id="overlay-screen" class="overlay-screen">
+      <div class="briefing-modal">
+        <div class="briefing-badge">SEGA 1982 TRIBUTE // MODERN THREE.JS + SHADERS + PHYSICS</div>
+        <h1 class="game-title">ZAXXON: <span>DESERT HOG</span></h1>
+        <p class="game-subtitle">
+          Fly the <strong>Fairchild Republic A-10 Thunderbolt II ("Warthog")</strong> in classic isometric 3/4 perspective across fortified desert compounds.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-box">
+            <h3>GAU-8/A 30MM CHAINGUN</h3>
+            <p>Unleash 3,900 RPM depleted-uranium &amp; HEI incendiary rounds with spinning 7-barrel physics, tracer streams, brass shell ejection, and synthesized <em>BRRRRRRT</em> audio.</p>
+          </div>
+          <div class="feature-box">
+            <h3>FRACTURING WALLS &amp; DEBRIS</h3>
+            <p>Blast right through concrete &amp; sandstone fortress walls! Concentrated gunfire fractures masonry blocks into physical 3D shards and triggers gravity collapses.</p>
+          </div>
+          <div class="feature-box">
+            <h3>DEPTH &amp; SHADOW NAVIGATION</h3>
+            <p>Watch your aircraft's real-time desert shadow and left-hand <strong>H–L Altimeter</strong>. Fly low to strafe fuel tanks &amp; turrets, climb high over barriers—or blast a hole through them!</p>
+          </div>
+          <div class="feature-box">
+            <h3>EXPLOSIVE RIGID-BODY PHYSICS</h3>
+            <p>Destroyed fuel depots, radar towers, SAM launchers, and turrets detonate with custom GLSL fireball shaders and hurl flaming 3D debris pieces across the desert floor.</p>
+          </div>
+        </div>
+
+        <!-- DESTRUCTIBLE PHYSICS DETAIL SETTING (0 - 10) -->
+        <div class="settings-box">
+          <div class="settings-header">
+            <label for="physics-detail-slider" class="settings-label">
+              DESTRUCTIBLE PHYSICS DETAIL
+            </label>
+            <span id="physics-detail-val" class="settings-val">7 / 10 (HIGH)</span>
+          </div>
+          <div class="slider-row">
+            <span class="slider-end">0 (MIN)</span>
+            <input
+              id="physics-detail-slider"
+              type="range"
+              min="0"
+              max="10"
+              step="1"
+              value="7"
+            />
+            <span class="slider-end">10 (ULTRA)</span>
+          </div>
+          <div id="gpu-detect-note" class="gpu-note">
+            Auto-tuned for detected GPU
+          </div>
+        </div>
+
+        <div class="briefing-actions">
+          <button id="btn-start" class="start-btn" type="button">
+            LAUNCH SORTIE // BRRRRRRT!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js?v=5"></script>
+</body>
+</html>
