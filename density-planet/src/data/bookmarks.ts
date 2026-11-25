@@ -1,0 +1,58 @@
+import type { CameraBookmark } from './types';
+
+export const CAMERA_BOOKMARKS: CameraBookmark[] = [
+  {
+    id: 'global',
+    label: 'Global Orbit',
+    shortLabel: 'GLOBAL',
+    lat: 22,
+    lon: 48,
+    distance: 3.05,
+    eraHint: 'Afro-Eurasian overview',
+  },
+  {
+    id: 'east-asia',
+    label: 'East Asia',
+    shortLabel: 'E. ASIA',
+    lat: 33,
+    lon: 118,
+    distance: 1.72,
+    eraHint: 'China, Japan & Korea corridors',
+  },
+  {
+    id: 'south-asia',
+    label: 'Indo-Gangetic Plain',
+    shortLabel: 'S. ASIA',
+    lat: 24,
+    lon: 82,
+    distance: 1.68,
+    eraHint: 'Ganges basin & Bengal delta',
+  },
+  {
+    id: 'europe',
+    label: 'Europe',
+    shortLabel: 'EUROPE',
+    lat: 49,
+    lon: 10,
+    distance: 1.65,
+    eraHint: 'Industrial heartland',
+  },
+  {
+    id: 'africa-nile',
+    label: 'Nile & Africa',
+    shortLabel: 'AFRICA',
+    lat: 14,
+    lon: 22,
+    distance: 2.25,
+    eraHint: 'Nile valley & Sub-Saharan surge',
+  },
+  {
+    id: 'americas',
+    label: 'Americas',
+    shortLabel: 'AMERICAS',
+    lat: 24,
+    lon: -86,
+    distance: 2.2,
+    eraHint: 'Mesoamerica, US Northeast & Brazil',
+  },
+];

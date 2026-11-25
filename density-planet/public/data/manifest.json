@@ -1,0 +1,2001 @@
+{
+  "dataset": "HYDE 3.3 Baseline",
+  "source": "PBL Netherlands Environmental Assessment Agency & Utrecht University (Klein Goldewijk et al., 2023)",
+  "width": 1440,
+  "height": 720,
+  "minYear": 1492,
+  "maxYear": 2023,
+  "maxEncodedDensity": 22000.0,
+  "landMaskFile": "land_mask.png",
+  "keyframes": [
+    {
+      "year": 1492,
+      "file": "frames/1492.png",
+      "worldPopulation": 511339954,
+      "peakDensity": 494.7,
+      "p995Density": 93.2,
+      "hotspots": [
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 494.7
+        },
+        {
+          "name": "Ganges Plain",
+          "region": "India",
+          "lat": 25.88,
+          "lon": 86.62,
+          "density": 238.8
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 423.5
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 376.6
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 184.2
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 164.2
+        }
+      ]
+    },
+    {
+      "year": 1500,
+      "file": "frames/1500.png",
+      "worldPopulation": 516880077,
+      "peakDensity": 498.0,
+      "p995Density": 93.4,
+      "hotspots": [
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 498.0
+        },
+        {
+          "name": "Ganges Plain",
+          "region": "India",
+          "lat": 25.88,
+          "lon": 86.62,
+          "density": 239.3
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 427.5
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 385.1
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 185.8
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 167.5
+        }
+      ]
+    },
+    {
+      "year": 1600,
+      "file": "frames/1600.png",
+      "worldPopulation": 531573032,
+      "peakDensity": 630.5,
+      "p995Density": 105.9,
+      "hotspots": [
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 630.5
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 382.7
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 532.2
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 192.0
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 179.9
+        },
+        {
+          "name": "Kerala Coast",
+          "region": "India",
+          "lat": 11.12,
+          "lon": 77.88,
+          "density": 150.1
+        }
+      ]
+    },
+    {
+      "year": 1700,
+      "file": "frames/1700.png",
+      "worldPopulation": 613292471,
+      "peakDensity": 1033.2,
+      "p995Density": 128.4,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 835.9
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 387.8
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 471.0
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 640.4
+        },
+        {
+          "name": "Kerala Coast",
+          "region": "India",
+          "lat": 11.12,
+          "lon": 77.88,
+          "density": 183.4
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 182.5
+        }
+      ]
+    },
+    {
+      "year": 1720,
+      "file": "frames/1720.png",
+      "worldPopulation": 667227768,
+      "peakDensity": 1146.3,
+      "p995Density": 134.7,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 887.1
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 514.0
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 700.3
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 339.9
+        },
+        {
+          "name": "Kerala Coast",
+          "region": "India",
+          "lat": 11.12,
+          "lon": 77.88,
+          "density": 200.0
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 203.0
+        }
+      ]
+    },
+    {
+      "year": 1740,
+      "file": "frames/1740.png",
+      "worldPopulation": 723233455,
+      "peakDensity": 1260.2,
+      "p995Density": 143.0,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 863.8
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 556.8
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 768.7
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 2.38,
+          "density": 324.7
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 229.9
+        },
+        {
+          "name": "Kerala Coast",
+          "region": "India",
+          "lat": 11.12,
+          "lon": 77.88,
+          "density": 218.1
+        }
+      ]
+    },
+    {
+      "year": 1760,
+      "file": "frames/1760.png",
+      "worldPopulation": 812287085,
+      "peakDensity": 1327.5,
+      "p995Density": 160.0,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 832.5
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 602.4
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 844.0
+        },
+        {
+          "name": "North China Plain",
+          "region": "China",
+          "lat": 34.88,
+          "lon": 118.62,
+          "density": 301.4
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 583.1
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 504.0
+        }
+      ]
+    },
+    {
+      "year": 1780,
+      "file": "frames/1780.png",
+      "worldPopulation": 929074769,
+      "peakDensity": 1348.1,
+      "p995Density": 188.0,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 739.6
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 650.7
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 926.8
+        },
+        {
+          "name": "Dublin",
+          "region": "Ireland",
+          "lat": 53.38,
+          "lon": -6.38,
+          "density": 550.1
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 640.6
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 647.6
+        }
+      ]
+    },
+    {
+      "year": 1800,
+      "file": "frames/1800.png",
+      "worldPopulation": 985954600,
+      "peakDensity": 1369.5,
+      "p995Density": 200.2,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 826.2
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 1017.8
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 701.6
+        },
+        {
+          "name": "Dublin",
+          "region": "Ireland",
+          "lat": 53.38,
+          "lon": -6.38,
+          "density": 871.9
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 804.7
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 701.0
+        }
+      ]
+    },
+    {
+      "year": 1810,
+      "file": "frames/1810.png",
+      "worldPopulation": 1062992625,
+      "peakDensity": 1580.8,
+      "p995Density": 221.4,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 992.9
+        },
+        {
+          "name": "Dublin",
+          "region": "Ireland",
+          "lat": 53.38,
+          "lon": -6.38,
+          "density": 1134.5
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 1066.6
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 728.0
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 887.9
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 732.5
+        }
+      ]
+    },
+    {
+      "year": 1820,
+      "file": "frames/1820.png",
+      "worldPopulation": 1101819449,
+      "peakDensity": 1791.7,
+      "p995Density": 228.6,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1050.6
+        },
+        {
+          "name": "Naples",
+          "region": "Italy",
+          "lat": 40.88,
+          "lon": 14.38,
+          "density": 1117.8
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 765.4
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 971.1
+        },
+        {
+          "name": "Dublin",
+          "region": "Ireland",
+          "lat": 53.38,
+          "lon": -6.38,
+          "density": 516.2
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 764.9
+        }
+      ]
+    },
+    {
+      "year": 1830,
+      "file": "frames/1830.png",
+      "worldPopulation": 1188080783,
+      "peakDensity": 1999.6,
+      "p995Density": 249.7,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1186.1
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 1999.6
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 917.1
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 1063.4
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 798.3
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 625.4
+        }
+      ]
+    },
+    {
+      "year": 1840,
+      "file": "frames/1840.png",
+      "worldPopulation": 1253076286,
+      "peakDensity": 2232.2,
+      "p995Density": 261.8,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1285.9
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 2232.2
+        },
+        {
+          "name": "Dhaka",
+          "region": "Bangladesh",
+          "lat": 23.62,
+          "lon": 90.38,
+          "density": 844.5
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 1290.3
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 852.0
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 832.9
+        }
+      ]
+    },
+    {
+      "year": 1850,
+      "file": "frames/1850.png",
+      "worldPopulation": 1334285025,
+      "peakDensity": 2477.4,
+      "p995Density": 279.6,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1375.9
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 2477.4
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1098.0
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 1430.8
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 1058.0
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 869.0
+        }
+      ]
+    },
+    {
+      "year": 1860,
+      "file": "frames/1860.png",
+      "worldPopulation": 1397414010,
+      "peakDensity": 3237.9,
+      "p995Density": 286.1,
+      "hotspots": [
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1384.8
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 3237.9
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1218.7
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 1681.8
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 1388.5
+        },
+        {
+          "name": "Lagos",
+          "region": "Nigeria",
+          "lat": 6.62,
+          "lon": 3.38,
+          "density": 906.9
+        }
+      ]
+    },
+    {
+      "year": 1870,
+      "file": "frames/1870.png",
+      "worldPopulation": 1400332753,
+      "peakDensity": 3963.9,
+      "p995Density": 275.9,
+      "hotspots": [
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 3963.9
+        },
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1202.5
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1349.0
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 1863.5
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 1711.8
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 1049.5
+        }
+      ]
+    },
+    {
+      "year": 1880,
+      "file": "frames/1880.png",
+      "worldPopulation": 1486473242,
+      "peakDensity": 4625.5,
+      "p995Density": 290.7,
+      "hotspots": [
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 4625.5
+        },
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1244.6
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 2192.8
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 2232.7
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1429.5
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 1249.8
+        }
+      ]
+    },
+    {
+      "year": 1890,
+      "file": "frames/1890.png",
+      "worldPopulation": 1613560693,
+      "peakDensity": 4852.2,
+      "p995Density": 316.4,
+      "hotspots": [
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 4852.2
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 2893.6
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 2574.6
+        },
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1312.5
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1638.7
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 994.3
+        }
+      ]
+    },
+    {
+      "year": 1900,
+      "file": "frames/1900.png",
+      "worldPopulation": 1743121668,
+      "peakDensity": 5196.9,
+      "p995Density": 341.2,
+      "hotspots": [
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 5196.9
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 3644.5
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 2950.8
+        },
+        {
+          "name": "Shanghai / Yangtze",
+          "region": "China",
+          "lat": 31.12,
+          "lon": 121.38,
+          "density": 1429.1
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1757.3
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 1332.9
+        }
+      ]
+    },
+    {
+      "year": 1910,
+      "file": "frames/1910.png",
+      "worldPopulation": 1882103112,
+      "peakDensity": 5624.5,
+      "p995Density": 367.8,
+      "hotspots": [
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 5067.5
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 5624.5
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 3751.1
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 2281.9
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 1842.8
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 1718.5
+        }
+      ]
+    },
+    {
+      "year": 1920,
+      "file": "frames/1920.png",
+      "worldPopulation": 2020129633,
+      "peakDensity": 6005.5,
+      "p995Density": 398.3,
+      "hotspots": [
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 6005.5
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 3139.1
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 5146.7
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 2305.9
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 3499.8
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 3460.7
+        }
+      ]
+    },
+    {
+      "year": 1930,
+      "file": "frames/1930.png",
+      "worldPopulation": 2211354230,
+      "peakDensity": 6850.2,
+      "p995Density": 440.1,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 4588.1
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 6850.2
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 6324.3
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 3057.0
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 3970.1
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 4311.1
+        }
+      ]
+    },
+    {
+      "year": 1940,
+      "file": "frames/1940.png",
+      "worldPopulation": 2449229056,
+      "peakDensity": 8817.3,
+      "p995Density": 492.5,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 6325.5
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 8817.3
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 7075.7
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 3565.6
+        },
+        {
+          "name": "St. Petersburg",
+          "region": "Russia",
+          "lat": 59.88,
+          "lon": 30.38,
+          "density": 4995.8
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 5177.2
+        }
+      ]
+    },
+    {
+      "year": 1950,
+      "file": "frames/1950.png",
+      "worldPopulation": 2664330995,
+      "peakDensity": 7635.7,
+      "p995Density": 543.2,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 5536.5
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 4440.9
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 7635.7
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 7306.3
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 6000.0
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 3481.4
+        }
+      ]
+    },
+    {
+      "year": 1955,
+      "file": "frames/1955.png",
+      "worldPopulation": 2910269942,
+      "peakDensity": 9513.2,
+      "p995Density": 588.1,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 7102.0
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 9513.2
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 4717.0
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 7773.6
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 5356.4
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 6215.1
+        }
+      ]
+    },
+    {
+      "year": 1960,
+      "file": "frames/1960.png",
+      "worldPopulation": 3186407997,
+      "peakDensity": 11630.3,
+      "p995Density": 642.3,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 8643.2
+        },
+        {
+          "name": "Cluster 55.1\u00b0N 61.4\u00b0E",
+          "region": "Russia",
+          "lat": 55.12,
+          "lon": 61.38,
+          "density": 11630.3
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 5203.2
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 8308.0
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 5840.3
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 6399.3
+        }
+      ]
+    },
+    {
+      "year": 1965,
+      "file": "frames/1965.png",
+      "worldPopulation": 3510422415,
+      "peakDensity": 9899.4,
+      "p995Density": 715.4,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 9899.4
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 5635.1
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 8843.2
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 6497.2
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 7746.6
+        },
+        {
+          "name": "Buenos Aires",
+          "region": "Argentina",
+          "lat": -34.62,
+          "lon": -58.38,
+          "density": 6581.4
+        }
+      ]
+    },
+    {
+      "year": 1970,
+      "file": "frames/1970.png",
+      "worldPopulation": 3894441862,
+      "peakDensity": 10780.3,
+      "p995Density": 796.4,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 10780.3
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 6086.2
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 9262.8
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 7496.8
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 9198.6
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 5512.9
+        }
+      ]
+    },
+    {
+      "year": 1975,
+      "file": "frames/1975.png",
+      "worldPopulation": 4295517992,
+      "peakDensity": 11174.1,
+      "p995Density": 874.1,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 11174.1
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 6186.2
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 10375.0
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 22.38,
+          "lon": 114.12,
+          "density": 8396.4
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 9408.7
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 7915.8
+        }
+      ]
+    },
+    {
+      "year": 1980,
+      "file": "frames/1980.png",
+      "worldPopulation": 4695980602,
+      "peakDensity": 11563.2,
+      "p995Density": 949.2,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 11444.1
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 11563.2
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 8620.6
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 9496.7
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 6279.5
+        },
+        {
+          "name": "Paris",
+          "region": "France",
+          "lat": 48.88,
+          "lon": 2.38,
+          "density": 9487.6
+        }
+      ]
+    },
+    {
+      "year": 1985,
+      "file": "frames/1985.png",
+      "worldPopulation": 5133623862,
+      "peakDensity": 11752.7,
+      "p995Density": 1027.6,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 11752.7
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 10971.2
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 10014.9
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 11228.9
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 8348.4
+        },
+        {
+          "name": "New York",
+          "region": "United States",
+          "lat": 40.88,
+          "lon": -73.88,
+          "density": 6574.0
+        }
+      ]
+    },
+    {
+      "year": 1990,
+      "file": "frames/1990.png",
+      "worldPopulation": 5606187984,
+      "peakDensity": 12401.3,
+      "p995Density": 1131.5,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 11976.8
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 12401.3
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 11594.5
+        },
+        {
+          "name": "Kolkata / Bengal",
+          "region": "India",
+          "lat": 22.62,
+          "lon": 88.38,
+          "density": 9574.4
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 11010.8
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 8449.0
+        }
+      ]
+    },
+    {
+      "year": 1995,
+      "file": "frames/1995.png",
+      "worldPopulation": 6056865105,
+      "peakDensity": 13717.6,
+      "p995Density": 1217.7,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12094.8
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 13396.5
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 13717.6
+        },
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 12957.3
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 9323.5
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 11389.5
+        }
+      ]
+    },
+    {
+      "year": 2000,
+      "file": "frames/2000.png",
+      "worldPopulation": 6483535815,
+      "peakDensity": 15212.7,
+      "p995Density": 1336.4,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12479.9
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 15094.6
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 14984.5
+        },
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 15212.7
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 10191.2
+        },
+        {
+          "name": "S\u00e3o Paulo",
+          "region": "Brazil",
+          "lat": -23.62,
+          "lon": -46.62,
+          "density": 11489.7
+        }
+      ]
+    },
+    {
+      "year": 2005,
+      "file": "frames/2005.png",
+      "worldPopulation": 6903953751,
+      "peakDensity": 16923.4,
+      "p995Density": 1434.4,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12635.6
+        },
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 16923.4
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 15986.1
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 15759.5
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 11260.5
+        },
+        {
+          "name": "S\u00e3o Paulo",
+          "region": "Brazil",
+          "lat": -23.62,
+          "lon": -46.62,
+          "density": 12579.4
+        }
+      ]
+    },
+    {
+      "year": 2010,
+      "file": "frames/2010.png",
+      "worldPopulation": 7320160016,
+      "peakDensity": 18463.9,
+      "p995Density": 1544.3,
+      "hotspots": [
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12738.8
+        },
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 18463.9
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 16562.8
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 16377.6
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 12408.8
+        },
+        {
+          "name": "S\u00e3o Paulo",
+          "region": "Brazil",
+          "lat": -23.62,
+          "lon": -46.62,
+          "density": 13531.2
+        }
+      ]
+    },
+    {
+      "year": 2015,
+      "file": "frames/2015.png",
+      "worldPopulation": 7832213255,
+      "peakDensity": 19805.7,
+      "p995Density": 1656.2,
+      "hotspots": [
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 19805.7
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12697.5
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 16999.8
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 16726.3
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 13814.1
+        },
+        {
+          "name": "S\u00e3o Paulo",
+          "region": "Brazil",
+          "lat": -23.62,
+          "lon": -46.62,
+          "density": 14220.5
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "file": "frames/2020.png",
+      "worldPopulation": 8232205171,
+      "peakDensity": 20801.6,
+      "p995Density": 1724.4,
+      "hotspots": [
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 20801.6
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12610.4
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 17401.2
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 15175.8
+        },
+        {
+          "name": "Pearl River Delta",
+          "region": "China",
+          "lat": 23.12,
+          "lon": 113.12,
+          "density": 16959.2
+        },
+        {
+          "name": "S\u00e3o Paulo",
+          "region": "Brazil",
+          "lat": -23.62,
+          "lon": -46.62,
+          "density": 14756.9
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "file": "frames/2023.png",
+      "worldPopulation": 8442464968,
+      "peakDensity": 21315.2,
+      "p995Density": 1768.2,
+      "hotspots": [
+        {
+          "name": "Mumbai",
+          "region": "India",
+          "lat": 19.12,
+          "lon": 72.88,
+          "density": 21315.2
+        },
+        {
+          "name": "Tokyo",
+          "region": "Japan",
+          "lat": 35.62,
+          "lon": 139.62,
+          "density": 12477.0
+        },
+        {
+          "name": "Cairo / Nile Delta",
+          "region": "Egypt",
+          "lat": 30.12,
+          "lon": 31.38,
+          "density": 15686.3
+        },
+        {
+          "name": "Jakarta / Java",
+          "region": "Indonesia",
+          "lat": -6.12,
+          "lon": 106.88,
+          "density": 17574.0
+        },
+        {
+          "name": "Manila",
+          "region": "Philippines",
+          "lat": 14.62,
+          "lon": 121.12,
+          "density": 13684.5
+        },
+        {
+          "name": "Mexico City",
+          "region": "Mexico",
+          "lat": 19.38,
+          "lon": -99.12,
+          "density": 15409.4
+        }
+      ]
+    }
+  ]
+}
