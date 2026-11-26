@@ -159,15 +159,41 @@ export class TSLComputePipeline {
     this.uTime.value = params.time;
   }
 
-  uploadDirtyBuffers(): void {
+  uploadDirtyBuffers(highWaterMark: number, includeColors: boolean): void {
+    const count = Math.min(this.maxPixels, Math.max(0, highWaterMark));
+    if (count === 0) return;
+
+    this.posAttribute.clearUpdateRanges();
+    this.posAttribute.addUpdateRange(0, count * 2);
     this.posAttribute.needsUpdate = true;
+
+    this.velAttribute.clearUpdateRanges();
+    this.velAttribute.addUpdateRange(0, count * 2);
     this.velAttribute.needsUpdate = true;
+
+    this.renderPosAttribute.clearUpdateRanges();
+    this.renderPosAttribute.addUpdateRange(0, count * 2);
     this.renderPosAttribute.needsUpdate = true;
-    this.colorAttribute.needsUpdate = true;
+
+    this.metaAttribute.clearUpdateRanges();
+    this.metaAttribute.addUpdateRange(0, count * 4);
     this.metaAttribute.needsUpdate = true;
+
+    if (includeColors) {
+      this.colorAttribute.clearUpdateRanges();
+      this.colorAttribute.addUpdateRange(0, count * 4);
+      this.colorAttribute.needsUpdate = true;
+    }
   }
 
-  getComputePasses(): ComputeNode[] {
-    return [...this.pluginComputeNodes, this.coreRenderCompute];
+  getComputePasses(dispatchCount?: number): ComputeNode[] {
+    const passes = [...this.pluginComputeNodes, this.coreRenderCompute];
+    if (dispatchCount !== undefined) {
+      const clamped = Math.min(this.maxPixels, Math.max(64, dispatchCount));
+      for (let i = 0; i < passes.length; i++) {
+        passes[i]!.count = clamped;
+      }
+    }
+    return passes;
   }
 }

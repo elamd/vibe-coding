@@ -261,7 +261,8 @@ export class PhysicsEngine {
     }
 
     const solver = this.getActiveSolver();
-    this.store.syncPackedMetadata(
+    this.store.syncPixelIndices(
+      result.pixelIndices,
       solver?.snapVisualsToGrid ?? false,
       this._virtualPixelSize,
       this.bounds.groundHeight,

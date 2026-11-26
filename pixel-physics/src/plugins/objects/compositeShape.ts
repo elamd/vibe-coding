@@ -17,6 +17,7 @@ export function spawnVertexFaceShape(
   ctx: PluginContext,
   params: {
     pluginId: string;
+    shapeKind?: 'polygon' | 'circle';
     vertices: ShapeVertex[];
     defaultColor: RGBAColor;
     defaultDensity?: number;
@@ -87,6 +88,7 @@ export function spawnVertexFaceShape(
 
     const body = store.createBondedBody({
       pluginId: params.pluginId,
+      shapeKind: params.shapeKind ?? 'polygon',
       x: centerX,
       y: centerY,
       vx: options.vx ?? 0,

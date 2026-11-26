@@ -53,6 +53,7 @@ export class CirclePlugin implements ShapePlugin {
       ctx,
       {
         pluginId: this.id,
+        shapeKind: 'circle',
         vertices: this.vertices,
         defaultColor: this.defaultColor,
         defaultDensity: 1.15,

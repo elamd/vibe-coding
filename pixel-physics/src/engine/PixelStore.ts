@@ -1,6 +1,6 @@
 import type { BondedBody, IPixelStore, RGBAColor, WorldBounds } from './types.ts';
 
-export const DEFAULT_MAX_PIXELS = 16384;
+export const DEFAULT_MAX_PIXELS = 131072;
 
 /**
  * Structure-of-Arrays (SoA) pixel store shared between CPU plugins and
@@ -27,8 +27,10 @@ export class PixelStore implements IPixelStore {
   private readonly freeList: number[] = [];
   private _activeCount = 0;
   private _highWaterMark = 0;
+  private _topologyVersion = 0;
   private nextBodyId = 1;
   private dirty = true;
+  private colorDirty = true;
 
   constructor(maxPixels = DEFAULT_MAX_PIXELS) {
     this.maxPixels = maxPixels;
@@ -55,6 +57,10 @@ export class PixelStore implements IPixelStore {
 
   get highWaterMark(): number {
     return this._highWaterMark;
+  }
+
+  get topologyVersion(): number {
+    return this._topologyVersion;
   }
 
   registerChannel(name: string, defaultValue: number): Float32Array {
@@ -128,7 +134,9 @@ export class PixelStore implements IPixelStore {
     }
 
     this._activeCount++;
+    this._topologyVersion++;
     this.dirty = true;
+    this.colorDirty = true;
     return idx;
   }
 
@@ -146,11 +154,13 @@ export class PixelStore implements IPixelStore {
 
     this.freeList.push(index);
     this._activeCount--;
+    this._topologyVersion++;
     this.dirty = true;
   }
 
   createBondedBody(params: {
     pluginId: string;
+    shapeKind?: 'polygon' | 'circle';
     x: number;
     y: number;
     vx?: number;
@@ -175,6 +185,7 @@ export class PixelStore implements IPixelStore {
     const body: BondedBody = {
       id,
       pluginId: params.pluginId,
+      shapeKind: params.shapeKind ?? 'polygon',
       pixelIndices: params.pixelIndices,
       localOffsets: params.localOffsets,
       color: { ...params.color },
@@ -202,6 +213,7 @@ export class PixelStore implements IPixelStore {
 
     this.recomputeBodyMassProperties(body, params.virtualPixelSize);
     this.bodies.set(id, body);
+    this._topologyVersion++;
     this.dirty = true;
     return body;
   }
@@ -262,26 +274,30 @@ export class PixelStore implements IPixelStore {
       }
     }
     this.bodies.clear();
+    this._topologyVersion++;
     this.dirty = true;
   }
 
   clear(): void {
-    this.active.fill(0);
-    this.bodyId.fill(-1);
-    this.pos.fill(0);
-    this.vel.fill(0);
-    this.renderPos.fill(0);
-    this.color.fill(0);
-    this.meta.fill(0);
+    const hwm = this._highWaterMark;
+    this.active.fill(0, 0, hwm);
+    this.bodyId.fill(-1, 0, hwm);
+    this.pos.fill(0, 0, hwm * 2);
+    this.vel.fill(0, 0, hwm * 2);
+    this.renderPos.fill(0, 0, hwm * 2);
+    this.color.fill(0, 0, hwm * 4);
+    this.meta.fill(0, 0, hwm * 4);
     for (const [key, arr] of this.channels) {
-      arr.fill(this.channelDefaults.get(key) ?? 0);
+      arr.fill(this.channelDefaults.get(key) ?? 0, 0, hwm);
     }
     this.bodies.clear();
     this.freeList.length = 0;
     this._activeCount = 0;
     this._highWaterMark = 0;
+    this._topologyVersion++;
     this.nextBodyId = 1;
     this.dirty = true;
+    this.colorDirty = true;
   }
 
   countVisible(bounds: WorldBounds, virtualPixelSize: number): number {
@@ -303,38 +319,74 @@ export class PixelStore implements IPixelStore {
     return count;
   }
 
-  /** Synchronize CPU mass channel into packed meta[i*4] and update renderPos for fallback */
+  /** Synchronize CPU mass/meta and update renderPos for active loose pixels */
   syncPackedMetadata(snapToGrid: boolean, virtualPixelSize: number, groundHeight: number): void {
     const massChannel = this.channels.get('mass');
     const half = virtualPixelSize * 0.5;
+    const invN = 1 / virtualPixelSize;
+    const hwm = this._highWaterMark;
+    const active = this.active;
+    const bodyId = this.bodyId;
+    const pos = this.pos;
+    const vel = this.vel;
+    const renderPos = this.renderPos;
+    const meta = this.meta;
 
-    for (let i = 0; i < this._highWaterMark; i++) {
-      const i2 = i * 2;
+    for (let i = 0; i < hwm; i++) {
       const i4 = i * 4;
-      if (this.active[i] === 0) {
-        this.meta[i4 + 1] = 0;
+      if (active[i] === 0) {
+        meta[i4 + 1] = 0;
         continue;
       }
 
+      const bId = bodyId[i]!;
+      meta[i4 + 1] = 1;
+      meta[i4 + 2] = bId;
       if (massChannel) {
-        this.meta[i4] = massChannel[i]!;
+        meta[i4] = massChannel[i]!;
       }
-      this.meta[i4 + 1] = 1;
-      this.meta[i4 + 2] = this.bodyId[i]!;
 
-      const vx = this.vel[i2]!;
-      const vy = this.vel[i2 + 1]!;
-      const speed = Math.hypot(vx, vy);
-      this.meta[i4 + 3] = Math.min(1, speed / 750);
+      // Bonded body vertices are rendered via the batched face mesh; skip loose-pixel glow/snap math
+      if (bId !== -1) continue;
 
+      const i2 = i * 2;
+      const vx = vel[i2]!;
+      const vy = vel[i2 + 1]!;
+      const speedSq = vx * vx + vy * vy;
+      meta[i4 + 3] = speedSq > 4 ? Math.min(1, Math.sqrt(speedSq) * (1 / 750)) : 0;
+
+      let rx = pos[i2]!;
+      let ry = pos[i2 + 1]!;
+      if (snapToGrid) {
+        rx = Math.floor(rx * invN) * virtualPixelSize + half;
+        const gy = Math.floor((ry - groundHeight) * invN);
+        ry = groundHeight + (gy > 0 ? gy : 0) * virtualPixelSize + half;
+      }
+      renderPos[i2] = rx;
+      renderPos[i2 + 1] = ry;
+    }
+    this.dirty = true;
+  }
+
+  /** Fast O(k) metadata sync for freshly spawned pixel indices */
+  syncPixelIndices(
+    indices: number[],
+    snapToGrid: boolean,
+    virtualPixelSize: number,
+    groundHeight: number,
+  ): void {
+    const half = virtualPixelSize * 0.5;
+    const invN = 1 / virtualPixelSize;
+    for (let k = 0; k < indices.length; k++) {
+      const i = indices[k]!;
+      if (this.active[i] === 0) continue;
+      const i2 = i * 2;
       let rx = this.pos[i2]!;
       let ry = this.pos[i2 + 1]!;
       if (snapToGrid) {
-        rx = Math.floor(rx / virtualPixelSize) * virtualPixelSize + half;
-        ry =
-          groundHeight +
-          Math.max(0, Math.floor((ry - groundHeight) / virtualPixelSize)) * virtualPixelSize +
-          half;
+        rx = Math.floor(rx * invN) * virtualPixelSize + half;
+        const gy = Math.floor((ry - groundHeight) * invN);
+        ry = groundHeight + (gy > 0 ? gy : 0) * virtualPixelSize + half;
       }
       this.renderPos[i2] = rx;
       this.renderPos[i2 + 1] = ry;
@@ -349,6 +401,12 @@ export class PixelStore implements IPixelStore {
   consumeDirty(): boolean {
     const wasDirty = this.dirty;
     this.dirty = false;
+    return wasDirty;
+  }
+
+  consumeColorDirty(): boolean {
+    const wasDirty = this.colorDirty;
+    this.colorDirty = false;
     return wasDirty;
   }
 }

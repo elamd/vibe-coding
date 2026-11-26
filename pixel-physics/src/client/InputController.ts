@@ -24,7 +24,7 @@ export class InputController {
   private readonly onShapeHotkey?: (shapeId: string) => void;
 
   private streamTimer: number | null = null;
-  private readonly streamIntervalMs = 250; // 4 spawns per second
+  private readonly streamIntervalMs = 25; // 4 spawns per second
   private active = true;
 
   constructor(

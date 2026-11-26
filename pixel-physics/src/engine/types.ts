@@ -188,6 +188,7 @@ export interface SceneObjectPlugin extends PluginObject {
 export interface BondedBody {
   id: number;
   pluginId: string;
+  shapeKind: 'polygon' | 'circle';
   pixelIndices: number[];
   /** Local CCW vertex coordinates in virtual-pixel grid units (x0, y0, x1, y1, ...) */
   localOffsets: Float32Array;
@@ -214,6 +215,7 @@ export interface IPixelStore {
   readonly maxPixels: number;
   readonly activeCount: number;
   readonly highWaterMark: number;
+  readonly topologyVersion: number;
 
   readonly pos: Float32Array;
   readonly vel: Float32Array;
@@ -245,6 +247,7 @@ export interface IPixelStore {
   freePixel(index: number): void;
   createBondedBody(params: {
     pluginId: string;
+    shapeKind?: 'polygon' | 'circle';
     x: number;
     y: number;
     vx?: number;
@@ -263,6 +266,7 @@ export interface IPixelStore {
   countVisible(bounds: WorldBounds, virtualPixelSize: number): number;
   markDirty(): void;
   consumeDirty(): boolean;
+  consumeColorDirty(): boolean;
 }
 
 export interface IPluginRegistry {

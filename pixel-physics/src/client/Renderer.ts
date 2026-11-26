@@ -1,12 +1,13 @@
 import {
   AdditiveBlending,
+  BufferAttribute,
   BufferGeometry,
   Color,
+  DynamicDrawUsage,
   Float32BufferAttribute,
   Group,
   InstancedBufferGeometry,
   LineBasicMaterial,
-  LineLoop,
   LineSegments,
   Mesh,
   MeshBasicNodeMaterial,
@@ -39,21 +40,16 @@ import {
 import { bloom } from 'three/addons/tsl/display/BloomNode.js';
 import type { PhysicsEngine } from '../engine/PhysicsEngine.ts';
 import { TSLComputePipeline } from '../engine/TSLComputePipeline.ts';
-import type { BondedBody, SceneObjectPlugin, ShapeFootprintCell, ShapeVertex } from '../engine/types.ts';
+import type { SceneObjectPlugin, ShapeFootprintCell, ShapeVertex } from '../engine/types.ts';
 
-interface BodyFaceVisual {
-  group: Group;
-  faceGeo: BufferGeometry;
-  faceMat: MeshBasicNodeMaterial;
-  edgeGeo: BufferGeometry;
-  edgeMat: LineBasicMaterial;
-}
+const INITIAL_FACE_VERT_CAPACITY = 98304; // Supports ~16,000+ squares or ~1,800+ circles in 1 draw call
+const INITIAL_EDGE_VERT_CAPACITY = 131072;
 
 /**
  * Three.js WebGPU + TSL Renderer with:
- *  - Hybrid GPU TSL compute shader execution (when WebGPU backend is active)
- *  - Zero-copy instanced rendering for loose virtual pixels via TSL NodeMaterials
- *  - Triangulated vertex-face meshes + glowing edges for composite shapes (no pixel fill)
+ *  - Hybrid GPU TSL compute shader execution (dynamic active dispatch + partial buffer uploads)
+ *  - Zero-copy instanced rendering for loose virtual pixels via TSL NodeMaterials (1 draw call)
+ *  - Batched triangulated vertex-face mesh + batched glowing edge lines for ALL composite shapes (2 draw calls total!)
  *  - Crisp Phosphor CRT post-processing: TSL Bloom + subtle scanlines + light vignette (no curvature)
  *  - Glowing phosphor ground floor bar & live vertex-outline reticle
  */
@@ -67,8 +63,24 @@ export class PixelPhysicsRenderer {
   private readonly postProcessing: PostProcessing;
   private readonly pixelMesh: Mesh;
   private readonly pixelGeometry: InstancedBufferGeometry;
-  private readonly bodyFacesGroup: Group;
-  private readonly bodyVisuals = new Map<number, BodyFaceVisual>();
+
+  // Batched vertex-face buffers (1 draw call for all polygon faces + 1 draw call for all glowing edges)
+  private readonly batchedFaceGeo: BufferGeometry;
+  private readonly batchedFaceMat: MeshBasicNodeMaterial;
+  private readonly batchedFaceMesh: Mesh;
+  private facePositions: Float32Array;
+  private faceColors: Float32Array;
+  private facePosAttr: BufferAttribute;
+  private faceColorAttr: BufferAttribute;
+
+  private readonly batchedEdgeGeo: BufferGeometry;
+  private readonly batchedEdgeMat: LineBasicMaterial;
+  private readonly batchedEdgeLines: LineSegments;
+  private edgePositions: Float32Array;
+  private edgeColors: Float32Array;
+  private edgePosAttr: BufferAttribute;
+  private edgeColorAttr: BufferAttribute;
+
   private readonly groundMesh: Mesh;
   private readonly reticleGroup: Group;
   private readonly reticleCrosshair: LineSegments;
@@ -109,7 +121,7 @@ export class PixelPhysicsRenderer {
       this.pipeline.rebuildPluginPasses(engine.registry.getAll());
     });
 
-    // 1. Instanced Virtual Pixel Mesh (loose standalone pixels only; composite bodies render as vertex faces)
+    // 1. Instanced Virtual Pixel Mesh (loose standalone pixels only — 1 draw call)
     const baseQuad = new PlaneGeometry(1, 1);
     this.pixelGeometry = new InstancedBufferGeometry();
     this.pixelGeometry.index = baseQuad.index;
@@ -131,7 +143,6 @@ export class PixelPhysicsRenderer {
       depthWrite: false,
     });
 
-    // Render only active loose pixels (meta.y > 0.5 && bodyId < 0)
     const isLoose = aMeta.z.lessThan(0.0).select(float(1.0), float(0.0));
     const isVisiblePixel = aMeta.y.mul(isLoose);
     const cellGap = smoothstep(float(2.0), float(5.0), uPixelSize).mul(0.08);
@@ -139,7 +150,6 @@ export class PixelPhysicsRenderer {
     const worldXY = aRenderPos.add(positionLocal.xy.mul(visualScale));
     pixelMat.positionNode = vec3(worldXY.x, worldXY.y, float(0.0));
 
-    // Phosphor cell shading: glowing hot core + crisp rim + kinetic velocity boost
     const localUV = uv().sub(vec2(0.5, 0.5)).mul(2.0);
     const edgeDist = max(abs(localUV.x), abs(localUV.y));
     const coreBoost = float(1.18).sub(smoothstep(float(0.0), float(0.95), edgeDist).mul(0.28));
@@ -152,12 +162,59 @@ export class PixelPhysicsRenderer {
     this.pixelMesh.renderOrder = 2;
     this.scene.add(this.pixelMesh);
 
-    // 2. Vertex-Face Composite Body Container (triangulated faces + glowing edges)
-    this.bodyFacesGroup = new Group();
-    this.bodyFacesGroup.renderOrder = 3;
-    this.scene.add(this.bodyFacesGroup);
+    // 2. Single Batched Vertex-Face Mesh for ALL composite shapes (1 draw call!)
+    this.facePositions = new Float32Array(INITIAL_FACE_VERT_CAPACITY * 3);
+    this.faceColors = new Float32Array(INITIAL_FACE_VERT_CAPACITY * 3);
+    this.facePosAttr = new BufferAttribute(this.facePositions, 3);
+    this.facePosAttr.setUsage(DynamicDrawUsage);
+    this.faceColorAttr = new BufferAttribute(this.faceColors, 3);
+    this.faceColorAttr.setUsage(DynamicDrawUsage);
 
-    // 3. Glowing Phosphor Ground Floor Bar
+    this.batchedFaceGeo = new BufferGeometry();
+    this.batchedFaceGeo.setAttribute('position', this.facePosAttr);
+    this.batchedFaceGeo.setAttribute('aFaceColor', this.faceColorAttr);
+    this.batchedFaceGeo.setDrawRange(0, 0);
+
+    this.batchedFaceMat = new MeshBasicNodeMaterial({
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+    });
+    const aFaceColor = attribute('aFaceColor', 'vec3');
+    this.batchedFaceMat.colorNode = vec4(aFaceColor, float(0.86));
+
+    this.batchedFaceMesh = new Mesh(this.batchedFaceGeo, this.batchedFaceMat);
+    this.batchedFaceMesh.frustumCulled = false;
+    this.batchedFaceMesh.renderOrder = 3;
+    this.scene.add(this.batchedFaceMesh);
+
+    // 3. Single Batched Glowing Edge LineSegments for ALL composite shapes (1 draw call!)
+    this.edgePositions = new Float32Array(INITIAL_EDGE_VERT_CAPACITY * 3);
+    this.edgeColors = new Float32Array(INITIAL_EDGE_VERT_CAPACITY * 3);
+    this.edgePosAttr = new BufferAttribute(this.edgePositions, 3);
+    this.edgePosAttr.setUsage(DynamicDrawUsage);
+    this.edgeColorAttr = new BufferAttribute(this.edgeColors, 3);
+    this.edgeColorAttr.setUsage(DynamicDrawUsage);
+
+    this.batchedEdgeGeo = new BufferGeometry();
+    this.batchedEdgeGeo.setAttribute('position', this.edgePosAttr);
+    this.batchedEdgeGeo.setAttribute('color', this.edgeColorAttr);
+    this.batchedEdgeGeo.setDrawRange(0, 0);
+
+    this.batchedEdgeMat = new LineBasicMaterial({
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.96,
+      blending: AdditiveBlending,
+      depthTest: false,
+    });
+
+    this.batchedEdgeLines = new LineSegments(this.batchedEdgeGeo, this.batchedEdgeMat);
+    this.batchedEdgeLines.frustumCulled = false;
+    this.batchedEdgeLines.renderOrder = 4;
+    this.scene.add(this.batchedEdgeLines);
+
+    // 4. Glowing Phosphor Ground Floor Bar
     const groundMat = new MeshBasicNodeMaterial({
       depthTest: false,
       depthWrite: false,
@@ -180,7 +237,7 @@ export class PixelPhysicsRenderer {
     this.scene.add(this.groundMesh);
     this.updateGroundTransform();
 
-    // 4. Glowing Reticle (Crosshair + Live Shape Vertex/Footprint Outline)
+    // 5. Glowing Reticle (Crosshair + Live Shape Vertex/Footprint Outline)
     this.reticleGroup = new Group();
     this.reticleGroup.visible = false;
     this.reticleGroup.renderOrder = 5;
@@ -207,7 +264,7 @@ export class PixelPhysicsRenderer {
 
     this.scene.add(this.reticleGroup);
 
-    // 5. Crisp Phosphor CRT TSL Post-Processing (Bloom + Subtle Scanlines + Soft Vignette, No Curvature)
+    // 6. Crisp Phosphor CRT TSL Post-Processing (Bloom + Subtle Scanlines + Soft Vignette, No Curvature)
     const scenePass = pass(this.scene, this.camera);
     const sceneColor = scenePass.getTextureNode('output');
     const bloomPass = bloom(sceneColor, 0.55, 0.42, 0.14);
@@ -314,6 +371,7 @@ export class PixelPhysicsRenderer {
 
     const solver = this.engine.getActiveSolver();
     const snapToGrid = solver?.snapVisualsToGrid ?? false;
+    const hwm = this.engine.store.highWaterMark;
 
     this.uGroundTime.value = this.engine.elapsedTime;
     this.pipeline.updateUniforms({
@@ -327,14 +385,15 @@ export class PixelPhysicsRenderer {
     });
 
     if (this.engine.store.consumeDirty()) {
-      this.pipeline.uploadDirtyBuffers();
+      const includeColors = this.engine.store.consumeColorDirty();
+      this.pipeline.uploadDirtyBuffers(hwm, includeColors);
     }
 
-    this.syncBodyFaceVisuals(snapToGrid);
-    this.pixelGeometry.instanceCount = this.engine.store.highWaterMark;
+    this.rebuildBatchedBodyFaces(snapToGrid);
+    this.pixelGeometry.instanceCount = hwm;
 
-    if (this.isWebGPU && this.engine.store.highWaterMark > 0) {
-      this.renderer.compute(this.pipeline.getComputePasses());
+    if (this.isWebGPU && hwm > 0) {
+      this.renderer.compute(this.pipeline.getComputePasses(hwm));
     }
 
     this.postProcessing.render();
@@ -343,10 +402,10 @@ export class PixelPhysicsRenderer {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
-    for (const visual of this.bodyVisuals.values()) {
-      this.disposeBodyVisual(visual);
-    }
-    this.bodyVisuals.clear();
+    this.batchedFaceGeo.dispose();
+    this.batchedFaceMat.dispose();
+    this.batchedEdgeGeo.dispose();
+    this.batchedEdgeMat.dispose();
     this.pixelGeometry.dispose();
     this.groundMesh.geometry.dispose();
     this.reticleCrosshair.geometry.dispose();
@@ -357,105 +416,180 @@ export class PixelPhysicsRenderer {
     this.renderer.dispose();
   }
 
-  private syncBodyFaceVisuals(snapToGrid: boolean): void {
+  /**
+   * Packs every active bonded polygon body's triangulated face and glowing perimeter
+   * into two single contiguous GPU buffers (2 draw calls total regardless of body count!).
+   */
+  private rebuildBatchedBodyFaces(snapToGrid: boolean): void {
     const bodies = this.engine.store.bodies;
-    const n = this.engine.virtualPixelSize;
-    const half = n * 0.5;
-    const { groundHeight } = this.engine.worldBounds;
-
-    // Remove visuals for dissolved or cleared bodies
-    for (const [id, visual] of this.bodyVisuals) {
-      if (!bodies.has(id)) {
-        this.bodyFacesGroup.remove(visual.group);
-        this.disposeBodyVisual(visual);
-        this.bodyVisuals.delete(id);
-      }
+    if (bodies.size === 0) {
+      this.batchedFaceGeo.setDrawRange(0, 0);
+      this.batchedEdgeGeo.setDrawRange(0, 0);
+      return;
     }
 
-    // Create/update triangulated vertex-face meshes for active bodies
+    // Count required vertices first so buffers grow cleanly if needed
+    let neededFaceVerts = 0;
+    let neededEdgeVerts = 0;
     for (const body of bodies.values()) {
-      if (!body.active || body.pixelIndices.length < 3) continue;
+      const n = body.pixelIndices.length;
+      if (!body.active || n < 3) continue;
+      // Fan from body center: n triangles -> n * 3 vertices (gives clean radial phosphor shading!)
+      neededFaceVerts += n * 3;
+      neededEdgeVerts += n * 2;
+    }
 
-      let visual = this.bodyVisuals.get(body.id);
-      if (!visual) {
-        visual = this.createBodyVisual(body);
-        this.bodyVisuals.set(body.id, visual);
-        this.bodyFacesGroup.add(visual.group);
-      }
+    this.ensureBatchCapacity(neededFaceVerts, neededEdgeVerts);
+
+    const nSize = this.engine.virtualPixelSize;
+    const invN = 1 / nSize;
+    const half = nSize * 0.5;
+    const groundHeight = this.engine.worldBounds.groundHeight;
+
+    const fPos = this.facePositions;
+    const fCol = this.faceColors;
+    const ePos = this.edgePositions;
+    const eCol = this.edgeColors;
+
+    let fIdx = 0;
+    let eIdx = 0;
+
+    for (const body of bodies.values()) {
+      const count = body.pixelIndices.length;
+      if (!body.active || count < 3) continue;
 
       let bx = body.x;
       let by = body.y;
       if (snapToGrid) {
-        bx = Math.floor(bx / n) * n + half;
-        by = groundHeight + Math.max(0, Math.floor((by - groundHeight) / n)) * n + half;
+        bx = Math.floor(bx * invN) * nSize + half;
+        const gy = Math.floor((by - groundHeight) * invN);
+        by = groundHeight + (gy > 0 ? gy : 0) * nSize + half;
       }
 
-      visual.group.position.set(bx, by, 0.5);
-      visual.group.rotation.z = body.angle;
-      visual.group.scale.set(n, n, 1);
+      const cos = Math.cos(body.angle) * nSize;
+      const sin = Math.sin(body.angle) * nSize;
+      const local = body.localOffsets;
+
+      const c = body.color;
+      // Center slightly darker, perimeter vertices brighter -> smooth CRT phosphor bevel gradient
+      const crCenter = c.r * 0.32;
+      const cgCenter = c.g * 0.32;
+      const cbCenter = c.b * 0.32;
+      const crRim = c.r * 0.62;
+      const cgRim = c.g * 0.62;
+      const cbRim = c.b * 0.62;
+      const er = Math.min(1, c.r * 1.15);
+      const eg = Math.min(1, c.g * 1.15);
+      const eb = Math.min(1, c.b * 1.15);
+
+      const lx0 = local[0]!;
+      const ly0 = local[1]!;
+      let prevX = bx + lx0 * cos - ly0 * sin;
+      let prevY = by + lx0 * sin + ly0 * cos;
+      const firstX = prevX;
+      const firstY = prevY;
+
+      for (let i = 0; i < count; i++) {
+        let nextX: number;
+        let nextY: number;
+        if (i + 1 === count) {
+          nextX = firstX;
+          nextY = firstY;
+        } else {
+          const lx = local[(i + 1) * 2]!;
+          const ly = local[(i + 1) * 2 + 1]!;
+          nextX = bx + lx * cos - ly * sin;
+          nextY = by + lx * sin + ly * cos;
+        }
+
+        // Triangle (center, prev, next)
+        fPos[fIdx] = bx;
+        fPos[fIdx + 1] = by;
+        fPos[fIdx + 2] = 0.5;
+        fCol[fIdx] = crCenter;
+        fCol[fIdx + 1] = cgCenter;
+        fCol[fIdx + 2] = cbCenter;
+
+        fPos[fIdx + 3] = prevX;
+        fPos[fIdx + 4] = prevY;
+        fPos[fIdx + 5] = 0.5;
+        fCol[fIdx + 3] = crRim;
+        fCol[fIdx + 4] = cgRim;
+        fCol[fIdx + 5] = cbRim;
+
+        fPos[fIdx + 6] = nextX;
+        fPos[fIdx + 7] = nextY;
+        fPos[fIdx + 8] = 0.5;
+        fCol[fIdx + 6] = crRim;
+        fCol[fIdx + 7] = cgRim;
+        fCol[fIdx + 8] = cbRim;
+        fIdx += 9;
+
+        // Glowing edge segment (prev -> next)
+        ePos[eIdx] = prevX;
+        ePos[eIdx + 1] = prevY;
+        ePos[eIdx + 2] = 0.55;
+        eCol[eIdx] = er;
+        eCol[eIdx + 1] = eg;
+        eCol[eIdx + 2] = eb;
+
+        ePos[eIdx + 3] = nextX;
+        ePos[eIdx + 4] = nextY;
+        ePos[eIdx + 5] = 0.55;
+        eCol[eIdx + 3] = er;
+        eCol[eIdx + 4] = eg;
+        eCol[eIdx + 5] = eb;
+        eIdx += 6;
+
+        prevX = nextX;
+        prevY = nextY;
+      }
     }
+
+    const faceVertCount = fIdx / 3;
+    const edgeVertCount = eIdx / 3;
+
+    this.facePosAttr.clearUpdateRanges();
+    this.facePosAttr.addUpdateRange(0, fIdx);
+    this.facePosAttr.needsUpdate = true;
+    this.faceColorAttr.clearUpdateRanges();
+    this.faceColorAttr.addUpdateRange(0, fIdx);
+    this.faceColorAttr.needsUpdate = true;
+    this.batchedFaceGeo.setDrawRange(0, faceVertCount);
+
+    this.edgePosAttr.clearUpdateRanges();
+    this.edgePosAttr.addUpdateRange(0, eIdx);
+    this.edgePosAttr.needsUpdate = true;
+    this.edgeColorAttr.clearUpdateRanges();
+    this.edgeColorAttr.addUpdateRange(0, eIdx);
+    this.edgeColorAttr.needsUpdate = true;
+    this.batchedEdgeGeo.setDrawRange(0, edgeVertCount);
   }
 
-  private createBodyVisual(body: BondedBody): BodyFaceVisual {
-    const count = body.pixelIndices.length;
-    const positions = new Float32Array(count * 3);
-    const indices: number[] = [];
-
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = body.localOffsets[i * 2]!;
-      positions[i * 3 + 1] = body.localOffsets[i * 2 + 1]!;
-      positions[i * 3 + 2] = 0;
+  private ensureBatchCapacity(faceVerts: number, edgeVerts: number): void {
+    if (faceVerts * 3 > this.facePositions.length) {
+      const nextCap = Math.max(faceVerts * 2, this.facePositions.length);
+      this.facePositions = new Float32Array(nextCap * 3);
+      this.faceColors = new Float32Array(nextCap * 3);
+      this.facePosAttr = new BufferAttribute(this.facePositions, 3);
+      this.facePosAttr.setUsage(DynamicDrawUsage);
+      this.faceColorAttr = new BufferAttribute(this.faceColors, 3);
+      this.faceColorAttr.setUsage(DynamicDrawUsage);
+      this.batchedFaceGeo.setAttribute('position', this.facePosAttr);
+      this.batchedFaceGeo.setAttribute('aFaceColor', this.faceColorAttr);
     }
 
-    // Triangulate the convex vertex polygon directly from its vertices (fan from v0)
-    for (let i = 1; i < count - 1; i++) {
-      indices.push(0, i, i + 1);
+    if (edgeVerts * 3 > this.edgePositions.length) {
+      const nextCap = Math.max(edgeVerts * 2, this.edgePositions.length);
+      this.edgePositions = new Float32Array(nextCap * 3);
+      this.edgeColors = new Float32Array(nextCap * 3);
+      this.edgePosAttr = new BufferAttribute(this.edgePositions, 3);
+      this.edgePosAttr.setUsage(DynamicDrawUsage);
+      this.edgeColorAttr = new BufferAttribute(this.edgeColors, 3);
+      this.edgeColorAttr.setUsage(DynamicDrawUsage);
+      this.batchedEdgeGeo.setAttribute('position', this.edgePosAttr);
+      this.batchedEdgeGeo.setAttribute('color', this.edgeColorAttr);
     }
-
-    const faceGeo = new BufferGeometry();
-    faceGeo.setAttribute('position', new Float32BufferAttribute(positions, 3));
-    faceGeo.setIndex(indices);
-
-    const c = body.color;
-    const faceMat = new MeshBasicNodeMaterial({
-      transparent: true,
-      depthTest: false,
-      depthWrite: false,
-    });
-    // Subtle glowing CRT phosphor face fill — slightly brighter toward perimeter
-    const radial = clamp(length(positionLocal.xy).div(Math.max(1, body.boundingRadiusGrid)), float(0.0), float(1.0));
-    const faceIntensity = float(0.32).add(radial.mul(0.28));
-    faceMat.colorNode = vec4(vec3(c.r, c.g, c.b).mul(faceIntensity), float(0.86));
-
-    const faceMesh = new Mesh(faceGeo, faceMat);
-    faceMesh.frustumCulled = false;
-
-    // Bright glowing vertex-to-vertex phosphor edge outline
-    const edgeGeo = new BufferGeometry();
-    edgeGeo.setAttribute('position', new Float32BufferAttribute(positions.slice(), 3));
-    const edgeMat = new LineBasicMaterial({
-      color: new Color(Math.min(1, c.r * 1.15), Math.min(1, c.g * 1.15), Math.min(1, c.b * 1.15)),
-      transparent: true,
-      opacity: 0.96,
-      blending: AdditiveBlending,
-      depthTest: false,
-    });
-    const edgeLoop = new LineLoop(edgeGeo, edgeMat);
-    edgeLoop.position.z = 0.05;
-    edgeLoop.frustumCulled = false;
-
-    const group = new Group();
-    group.add(faceMesh);
-    group.add(edgeLoop);
-
-    return { group, faceGeo, faceMat, edgeGeo, edgeMat };
-  }
-
-  private disposeBodyVisual(visual: BodyFaceVisual): void {
-    visual.faceGeo.dispose();
-    visual.faceMat.dispose();
-    visual.edgeGeo.dispose();
-    visual.edgeMat.dispose();
   }
 
   private updateGroundTransform(): void {
