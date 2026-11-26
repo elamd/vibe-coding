@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIXEL PHYSICS // CRT-TSL</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <canvas id="sim-canvas" aria-label="2D Per-Pixel Physics Canvas"></canvas>
+
+    <!-- Upper-Left: Visible Pixel Counter + FPS Counter underneath -->
+    <aside id="hud-top-left" class="hud-panel" aria-live="polite">
+      <div class="stat-row">
+        <span class="stat-label">PIXELS</span>
+        <span id="pixel-count" class="stat-value">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">FPS</span>
+        <span id="fps-count" class="stat-value stat-fps">60</span>
+      </div>
+    </aside>
+
+    <!-- Upper-Right: Virtual Pixel Resolution Input + Simulation Mode & Shape Buttons -->
+    <aside id="hud-top-right" class="hud-panel">
+      <label class="res-control" for="pixel-size-input">
+        <span class="control-label">VIRTUAL PX</span>
+        <div class="res-input-wrap">
+          <input
+            id="pixel-size-input"
+            type="number"
+            min="1"
+            max="64"
+            step="1"
+            value="8"
+            inputmode="numeric"
+            aria-label="Virtual pixel size N by N"
+          />
+          <span id="pixel-size-suffix" class="res-suffix">×8 px</span>
+        </div>
+      </label>
+
+      <div class="control-group">
+        <span class="control-label">SOLVER</span>
+        <div id="solver-buttons" class="btn-row" role="group" aria-label="Simulation Method"></div>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">OBJECT</span>
+        <div id="shape-buttons" class="btn-row" role="group" aria-label="Spawnable Object"></div>
+      </div>
+    </aside>
+
+    <!-- Lower-Right: Clear & Exit Buttons -->
+    <aside id="hud-bottom-right" class="hud-panel hud-actions">
+      <button id="clear-btn" class="crt-btn crt-btn-warn" type="button">CLEAR</button>
+      <button id="exit-btn" class="crt-btn crt-btn-danger" type="button">EXIT</button>
+    </aside>
+
+    <!-- Fallback overlay shown only if browser blocks window.close() after Exit -->
+    <div id="exit-overlay" class="exit-overlay hidden" role="dialog" aria-modal="true">
+      <div class="exit-card">
+        <p class="exit-title">SIMULATION HALTED</p>
+        <p class="exit-sub">
+          The browser prevented closing this tab automatically. You may safely close the window, or resume below.
+        </p>
+        <button id="resume-btn" class="crt-btn" type="button">RESUME</button>
+      </div>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

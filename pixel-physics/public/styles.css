@@ -1,0 +1,283 @@
+:root {
+  --crt-bg: #04080d;
+  --crt-panel: rgba(6, 16, 22, 0.72);
+  --crt-cyan: #5efce8;
+  --crt-amber: #ffc43d;
+  --crt-lime: #8fff5c;
+  --crt-danger: #ff5c77;
+  --crt-border: rgba(94, 252, 232, 0.38);
+  --crt-glow-cyan: 0 0 8px rgba(94, 252, 232, 0.55), 0 0 18px rgba(94, 252, 232, 0.22);
+  --crt-glow-amber: 0 0 8px rgba(255, 196, 61, 0.55), 0 0 18px rgba(255, 196, 61, 0.2);
+  --crt-glow-danger: 0 0 8px rgba(255, 92, 119, 0.55), 0 0 18px rgba(255, 92, 119, 0.22);
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--crt-bg);
+  color: var(--crt-cyan);
+  font-family: var(--font-mono);
+}
+
+#sim-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: none;
+  touch-action: none;
+}
+
+/* Crisp Phosphor CRT HUD Panels */
+.hud-panel {
+  position: fixed;
+  z-index: 10;
+  background: var(--crt-panel);
+  border: 1px solid var(--crt-border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  backdrop-filter: blur(4px);
+  box-shadow:
+    inset 0 0 14px rgba(94, 252, 232, 0.08),
+    0 0 14px rgba(94, 252, 232, 0.18),
+    0 0 28px rgba(94, 252, 232, 0.07);
+}
+
+/* Subtle horizontal scanline texture across HUD panels */
+.hud-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+#hud-top-left {
+  top: 16px;
+  left: 16px;
+  min-width: 144px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(94, 252, 232, 0.72);
+  text-shadow: 0 0 6px rgba(94, 252, 232, 0.4);
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--crt-cyan);
+  text-shadow: var(--crt-glow-cyan);
+}
+
+.stat-fps {
+  font-size: 15px;
+  color: var(--crt-lime);
+  text-shadow: 0 0 8px rgba(143, 255, 92, 0.55), 0 0 16px rgba(143, 255, 92, 0.22);
+}
+
+#hud-top-right {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.res-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(94, 252, 232, 0.72);
+  text-shadow: 0 0 6px rgba(94, 252, 232, 0.35);
+}
+
+.res-input-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: rgba(2, 10, 14, 0.85);
+  border: 1px solid rgba(94, 252, 232, 0.5);
+  border-radius: 3px;
+  box-shadow: inset 0 0 8px rgba(94, 252, 232, 0.14), 0 0 8px rgba(94, 252, 232, 0.18);
+}
+
+#pixel-size-input {
+  width: 44px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--crt-cyan);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--crt-glow-cyan);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.res-suffix {
+  font-size: 12px;
+  color: rgba(94, 252, 232, 0.78);
+  text-shadow: 0 0 6px rgba(94, 252, 232, 0.4);
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+}
+
+.crt-btn {
+  appearance: none;
+  background: rgba(4, 16, 22, 0.85);
+  color: rgba(94, 252, 232, 0.85);
+  border: 1px solid rgba(94, 252, 232, 0.36);
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+  text-shadow: 0 0 6px rgba(94, 252, 232, 0.4);
+  box-shadow: 0 0 8px rgba(94, 252, 232, 0.1);
+}
+
+.crt-btn:hover {
+  border-color: var(--crt-cyan);
+  color: #ffffff;
+  background: rgba(94, 252, 232, 0.16);
+  box-shadow: var(--crt-glow-cyan);
+}
+
+.crt-btn.is-active {
+  border-color: var(--crt-cyan);
+  color: #031216;
+  background: var(--crt-cyan);
+  text-shadow: none;
+  box-shadow: var(--crt-glow-cyan);
+}
+
+.crt-btn-warn {
+  color: var(--crt-amber);
+  border-color: rgba(255, 196, 61, 0.45);
+  text-shadow: 0 0 6px rgba(255, 196, 61, 0.45);
+}
+
+.crt-btn-warn:hover {
+  color: #160f02;
+  background: var(--crt-amber);
+  border-color: var(--crt-amber);
+  text-shadow: none;
+  box-shadow: var(--crt-glow-amber);
+}
+
+.crt-btn-danger {
+  color: var(--crt-danger);
+  border-color: rgba(255, 92, 119, 0.45);
+  text-shadow: 0 0 6px rgba(255, 92, 119, 0.45);
+}
+
+.crt-btn-danger:hover {
+  color: #180308;
+  background: var(--crt-danger);
+  border-color: var(--crt-danger);
+  text-shadow: none;
+  box-shadow: var(--crt-glow-danger);
+}
+
+#hud-bottom-right {
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.exit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 8, 13, 0.92);
+  backdrop-filter: blur(6px);
+}
+
+.exit-overlay.hidden {
+  display: none;
+}
+
+.exit-card {
+  max-width: 380px;
+  padding: 24px 28px;
+  text-align: center;
+  background: rgba(6, 18, 24, 0.92);
+  border: 1px solid var(--crt-cyan);
+  border-radius: 4px;
+  box-shadow: var(--crt-glow-cyan);
+}
+
+.exit-title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--crt-cyan);
+  text-shadow: var(--crt-glow-cyan);
+}
+
+.exit-sub {
+  margin: 0 0 18px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(94, 252, 232, 0.8);
+}
